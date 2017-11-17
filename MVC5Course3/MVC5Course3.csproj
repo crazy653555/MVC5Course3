@@ -259,6 +259,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Test\MemberProfile.cshtml" />
     <Content Include="Views\EF\Index.cshtml" />
+    <Content Include="Views\EF\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

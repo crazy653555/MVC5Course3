@@ -10,10 +10,10 @@ namespace MVC5Course3.Controllers
 {
     public class EFController : Controller
     {
+        FabricsEntities db = new FabricsEntities();
         // GET: EF
         public ActionResult Index(String searchProduct)
         {
-            var db = new FabricsEntities();
             var data = db.Product.AsQueryable();
 
             if (!string.IsNullOrEmpty(searchProduct))
@@ -25,7 +25,7 @@ namespace MVC5Course3.Controllers
                 db.Product.Add(new Product()
                 {
                     ProductName = "BMW",
-                    Price = 1,
+                    Price = 2,
                     Stock = 1,
                     Active = true
                 });
@@ -50,6 +50,18 @@ namespace MVC5Course3.Controllers
                 }
             }
 
+            return View(data);
+        }
+
+
+
+        public ActionResult Detail(int id)
+        {
+            //var data = db.Product.Find(id);
+
+            //var data = db.Product.Where(p => p.ProductId == id).FirstOrDefault();
+
+            var data = db.Product.FirstOrDefault(p => p.ProductId == id);
             return View(data);
         }
     }
