@@ -11,7 +11,8 @@ namespace MVC5Course3.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Product
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -22,6 +23,8 @@ namespace MVC5Course3.Models
     
         public int ProductId { get; set; }
         public string ProductName { get; set; }
+        
+        [Range(2,99,ErrorMessage ="商品價格必須介於 2~99之間")]
         public Nullable<decimal> Price { get; set; }
         public Nullable<bool> Active { get; set; }
         public Nullable<decimal> Stock { get; set; }
