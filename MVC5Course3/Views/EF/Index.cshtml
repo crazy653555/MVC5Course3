@@ -2,6 +2,12 @@
 
 <p>
     @Html.ActionLink("Create New", "Create")
+
+    @using (Html.BeginForm("Index", "EF", FormMethod.Get))
+    {
+       <input type="search" name="searchProduct" placeholder="please input Product Name" value="" />
+    }
+
 </p>
 <table class="table">
     <tr>

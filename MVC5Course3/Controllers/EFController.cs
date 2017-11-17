@@ -10,21 +10,26 @@ namespace MVC5Course3.Controllers
     public class EFController : Controller
     {
         // GET: EF
-        public ActionResult Index()
+        public ActionResult Index(String searchProduct)
         {
             var db = new FabricsEntities();
+            var data = db.Product.AsQueryable();
 
-            db.Product.Add(new Product()
+            if (!string.IsNullOrEmpty(searchProduct))
             {
-                ProductName = "尾椎小太陽",
-                Price = 5,
-                Stock = 1,
-                Active = true
-            });
-
-            db.SaveChanges();
-
-            var data = db.Product.ToList();
+                data = data.Where(p => p.ProductName.Contains(searchProduct));
+            }
+            else
+            {
+                db.Product.Add(new Product()
+                {
+                    ProductName = "BMW",
+                    Price = 5,
+                    Stock = 1,
+                    Active = true
+                });
+                db.SaveChanges();
+            }
 
             return View(data);
         }
