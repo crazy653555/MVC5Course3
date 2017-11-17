@@ -22,9 +22,27 @@ namespace MVC5Course3.Controllers
                 Active = true
             });
 
-            db.Product.Add(product);
+            //db.Product.Add(product);
 
 
+            //SaveChanges();
+
+            var pkey = product.ProductId;
+
+            var data = db.Product.OrderByDescending(p => p.ProductId).Take(5);
+
+            foreach (var item in data)
+            {
+                item.Price = item.Price + 1;
+            }
+
+            SaveChanges();
+
+            return View(data);
+        }
+
+        private void SaveChanges()
+        {
             try
             {
                 db.SaveChanges();
@@ -42,28 +60,17 @@ namespace MVC5Course3.Controllers
                 }
                 throw;
             }
-
-
-            var pkey = product.ProductId;
-
-            var data = db.Product.OrderByDescending(p => p.ProductId).Take(5);
-
-            foreach(var item in data)
-            {
-                item.Price = item.Price + 1;
-            }
-
-            db.SaveChanges();
-
-            return View(data);
         }
-
 
         public ActionResult Delete(int id)
         {
-            var item = db.Product.Find(id);
-            db.Product.Remove(item);
-            db.SaveChanges();
+            var product = db.Product.Find(id);
+
+            db.OrderLine.RemoveRange(product.OrderLine);
+
+            db.Product.Remove(product);
+
+            SaveChanges();
 
             return RedirectToAction("Index");
         }
@@ -72,11 +79,13 @@ namespace MVC5Course3.Controllers
 
         public ActionResult Detail(int id)
         {
-            //var data = db.Product.Find(id);
+            //var product = db.Product.Find(id);
 
             //var data = db.Product.Where(p => p.ProductId == id).FirstOrDefault();
 
             var data = db.Product.FirstOrDefault(p => p.ProductId == id);
+
+
             return View(data);
         }
     }
