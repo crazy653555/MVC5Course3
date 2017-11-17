@@ -14,43 +14,58 @@ namespace MVC5Course3.Controllers
         // GET: EF
         public ActionResult Index(String searchProduct)
         {
-            var data = db.Product.AsQueryable();
-
-            if (!string.IsNullOrEmpty(searchProduct))
+            var product = (new Product()
             {
-                data = data.Where(p => p.ProductName.Contains(searchProduct));
+                ProductName = "BMW",
+                Price = 2,
+                Stock = 1,
+                Active = true
+            });
+
+            db.Product.Add(product);
+
+
+            try
+            {
+                db.SaveChanges();
             }
-            else
+            catch (DbEntityValidationException ex)
             {
-                db.Product.Add(new Product()
+                foreach (DbEntityValidationResult item in ex.EntityValidationErrors)
                 {
-                    ProductName = "BMW",
-                    Price = 2,
-                    Stock = 1,
-                    Active = true
-                });
+                    string entityName = item.Entry.Entity.GetType().Name;
 
-
-                try
-                {
-                    db.SaveChanges();
-                }
-                catch (DbEntityValidationException ex)
-                {
-                    foreach (DbEntityValidationResult item in ex.EntityValidationErrors)
+                    foreach (DbValidationError err in item.ValidationErrors)
                     {
-                        string entityName = item.Entry.Entity.GetType().Name;
-
-                        foreach (DbValidationError err in item.ValidationErrors)
-                        {
-                            throw new Exception(entityName + " 類型驗證失敗: " + err.ErrorMessage);
-                        }
+                        throw new Exception(entityName + " 類型驗證失敗: " + err.ErrorMessage);
                     }
-                    throw;
                 }
+                throw;
             }
+
+
+            var pkey = product.ProductId;
+
+            var data = db.Product.OrderByDescending(p => p.ProductId).Take(5);
+
+            foreach(var item in data)
+            {
+                item.Price = item.Price + 1;
+            }
+
+            db.SaveChanges();
 
             return View(data);
+        }
+
+
+        public ActionResult Delete(int id)
+        {
+            var item = db.Product.Find(id);
+            db.Product.Remove(item);
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
         }
 
 
