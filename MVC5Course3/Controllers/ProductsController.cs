@@ -15,7 +15,7 @@ namespace MVC5Course3.Controllers
         private FabricsEntities db = new FabricsEntities();
 
         // GET: Products
-        public ActionResult Index()
+        public ActionResult Index(bool? IsActive )
         {
             return View(db.Product.ToList());
         }
