@@ -17,7 +17,7 @@ namespace MVC5Course3.Controllers
         // GET: Products
         public ActionResult Index(bool? IsActive )
         {
-            return View(db.Product.ToList());
+            return View(db.Product.OrderByDescending(p => p.ProductId).ToList());
         }
 
         // GET: Products/Details/5

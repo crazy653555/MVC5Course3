@@ -5,6 +5,7 @@ using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity;
 
 namespace MVC5Course3.Controllers
 {
@@ -99,6 +100,18 @@ namespace MVC5Course3.Controllers
 
 
             return View(data);
+        }
+
+
+        public ActionResult QueryPlan(int num = 10)
+        {
+            var data = db.Product
+                .Include(t => t.OrderLine)
+                .OrderBy(p => p.ProductId)
+                .AsQueryable();
+
+            return View(data);
+
         }
     }
 }
